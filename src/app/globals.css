@@ -1,26 +1,228 @@
 @import "tailwindcss";
 
+@plugin "tailwindcss-animate";
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+  --card: 240 10% 3.9%;
+  --card-foreground: 0 0% 98%;
+  --popover: 240 10% 3.9%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 180 100% 50%; /* Neon Cyan */
+  --primary-foreground: 240 5.9% 10%;
+  --secondary: 300 100% 50%; /* Neon Purple / Magenta */
+  --secondary-foreground: 0 0% 98%;
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+  --accent: 320 100% 50%; /* Neon Pink */
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  --ring: 180 100% 50%;
+  --radius: 0.5rem;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-space-grotesk), var(--font-sans), sans-serif;
+  overflow-x: hidden;
 }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-bricolage), var(--font-sans), sans-serif;
+}
+
+@theme {
+  --font-sans: var(--font-space-grotesk), var(--font-sans), sans-serif;
+  --font-display: var(--font-bricolage), sans-serif;
+
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --animate-border-beam: border-beam calc(var(--duration)*1s) infinite linear;
+  --animate-retro-grid: retro-grid 15s linear infinite;
+  --animate-neon-gradient: neon-gradient var(--duration, 10s) linear infinite;
+  --animate-shimmer-slide: shimmer-slide var(--speed, 3s) infinite linear;
+
+  /* Aurora background animations */
+  --animate-aurora-1: aurora-1 22s ease-in-out infinite;
+  --animate-aurora-2: aurora-2 26s ease-in-out infinite;
+  --animate-aurora-3: aurora-3 24s ease-in-out infinite;
+  --animate-aurora-4: aurora-4 28s ease-in-out infinite;
+  --animate-shiny-shimmer: shine 3s linear infinite;
+
+  @keyframes shine {
+    0% {
+      background-position: -120% center;
+    }
+    100% {
+      background-position: 120% center;
+    }
+  }
+
+  @keyframes aurora-1 {
+    0% {
+      transform: translate(0px, 0px) rotate(0deg) scale(1);
+    }
+    33% {
+      transform: translate(30px, -50px) rotate(120deg) scale(1.1);
+    }
+    66% {
+      transform: translate(-30px, 20px) rotate(240deg) scale(0.9);
+    }
+    100% {
+      transform: translate(0px, 0px) rotate(360deg) scale(1);
+    }
+  }
+
+  @keyframes aurora-2 {
+    0% {
+      transform: translate(0px, 0px) rotate(0deg) scale(1);
+    }
+    33% {
+      transform: translate(-40px, 40px) rotate(-120deg) scale(0.95);
+    }
+    66% {
+      transform: translate(30px, -20px) rotate(-240deg) scale(1.05);
+    }
+    100% {
+      transform: translate(0px, 0px) rotate(-360deg) scale(1);
+    }
+  }
+
+  @keyframes aurora-3 {
+    0% {
+      transform: translate(0px, 0px) rotate(0deg) scale(1);
+    }
+    50% {
+      transform: translate(40px, 30px) rotate(180deg) scale(1.1);
+    }
+    100% {
+      transform: translate(0px, 0px) rotate(360deg) scale(1);
+    }
+  }
+
+  @keyframes aurora-4 {
+    0% {
+      transform: translate(0px, 0px) rotate(0deg) scale(1);
+    }
+    50% {
+      transform: translate(-30px, -40px) rotate(-180deg) scale(0.9);
+    }
+    100% {
+      transform: translate(0px, 0px) rotate(-360deg) scale(1);
+    }
+  }
+
+  @keyframes shimmer-slide {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes neon-gradient {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  @keyframes border-beam {
+    100% {
+      offset-distance: 100%;
+    }
+  }
+  @keyframes retro-grid {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(calc(var(--grid-row-size, 60px) * 2));
+    }
+  }
+}
+
+/* Scrollbar customizations */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted));
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary));
+}
+
+/* Custom background glows */
+.neon-glow {
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.5), 0 0 20px rgba(0, 240, 255, 0.2);
+}
+.neon-glow-pink {
+  text-shadow: 0 0 10px rgba(255, 0, 127, 0.5), 0 0 20px rgba(255, 0, 127, 0.2);
+}
+.neon-box-glow {
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.25);
+}
+
+/* Marquee animation classes */
+.marquee-inner {
+  animation: marquee var(--duration, 40s) linear infinite;
+}
+
+.marquee-vertical-inner {
+  animation: marquee-vertical var(--duration, 40s) linear infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - var(--gap, 1rem)));
+  }
+}
+
+@keyframes marquee-vertical {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(calc(-100% - var(--gap, 1rem)));
+  }
+}
+
