@@ -42,9 +42,9 @@ export function NavigationDock() {
                   delay: 0.2 + index * 0.05,
                 }}
               >
-                <DockIcon className="bg-transparent border-none group/icon relative rounded-full hover:bg-white/10 transition-colors duration-300 cursor-pointer">
+                <DockIcon className="bg-transparent border border-transparent group/icon relative rounded-full hover:bg-white/10 hover:border-white/20 hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] transition-all duration-300 cursor-pointer">
                   <a href={item.href} className="flex h-full w-full items-center justify-center p-3">
-                    <Icon className="h-5 w-5 transition-all duration-300 group-hover/icon:scale-110 text-zinc-400 group-hover/icon:text-white" />
+                    <Icon className="h-5 w-5 transition-all duration-300 group-hover/icon:scale-110 text-zinc-400 group-hover/icon:text-white group-hover/icon:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
                     
                     {/* Tooltip */}
                     <span className="absolute -top-12 left-1/2 -translate-x-1/2 scale-50 rounded-lg bg-zinc-900 border border-zinc-800 px-3 py-1.5 text-xs font-medium text-zinc-200 transition-all duration-300 group-hover/icon:scale-100 whitespace-nowrap opacity-0 group-hover/icon:opacity-100 pointer-events-none shadow-xl origin-bottom">
