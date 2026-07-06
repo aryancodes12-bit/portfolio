@@ -7,6 +7,7 @@ import { Experience } from "@/components/sections/Experience";
 import { Contact } from "@/components/sections/Contact";
 import { TargetCursor } from "@/components/ui/TargetCursor";
 import { AuroraBackground } from "@/components/ui/AuroraBackground";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 export default function Home() {
   return (
@@ -15,12 +16,24 @@ export default function Home() {
       <TargetCursor />
       <NavigationDock />
       <main className="relative z-10 flex flex-col w-full">
-        <Hero />
-        <About />
-        <Skills />
-        <Projects />
-        <Experience />
-        <Contact />
+        <ScrollReveal direction="up" delay={0.2}>
+          <Hero />
+        </ScrollReveal>
+        <ScrollReveal direction="up" delay={0.2}>
+          <About />
+        </ScrollReveal>
+        <ScrollReveal direction="up" delay={0.2}>
+          <Skills />
+        </ScrollReveal>
+        <ScrollReveal direction="up" delay={0.2}>
+          <Projects />
+        </ScrollReveal>
+        <ScrollReveal direction="up" delay={0.2}>
+          <Experience />
+        </ScrollReveal>
+        <ScrollReveal direction="up" delay={0.2}>
+          <Contact />
+        </ScrollReveal>
       </main>
     </div>
   );
