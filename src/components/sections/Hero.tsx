@@ -16,7 +16,7 @@ const quickActions = [
   {
     label: "View Resume",
     icon: FileText,
-    href: "https://drive.google.com/file/d/1j8lGotieS-eDW4cbFLdlTV_BXzXiI55o/view?usp=drive_link",
+    href: "https://drive.google.com/file/d/1pP7HkRQzr8hDRT-KRkuB8xsWRpTrBpwV/view?usp=sharing",
     primary: true,
   },
   {
