@@ -19,6 +19,17 @@ interface Project {
 
 const projects: Project[] = [
   {
+    title: "LeetWeave Scribe",
+    description:
+      "A dual-runtime automated code organizer (CLI and browser extension) that intercepts accepted LeetCode submissions and pushes them to GitHub into structured, per-problem folders by topic or difficulty. It features offline metadata lookup for ~2,900 problems, optional AI-generated approach summaries, and resilient concurrent sync handling.",
+    technologies: ["TypeScript", "Node.js", "Manifest V3", "Vitest", "esbuild", "Groq API"],
+    github: "https://github.com/aryancodes12-bit/LeetWeave-Scribe",
+    live: "https://github.com/aryancodes12-bit/LeetWeave-Scribe",
+    featured: true,
+    colorFrom: "#00f0ff",
+    colorTo: "#bc13fe",
+  },
+  {
     title: "Air Pollution Detection Dashboard",
     description:
       "React-based dashboard developed during Bhartiya Antariksh Hackathon 2025 to visualize real-time air quality data from 50+ monitoring stations using satellite and ground sensors.",
@@ -26,40 +37,7 @@ const projects: Project[] = [
     github: "https://github.com/aryancodes12-bit",
     live: "https://air-pollution-detection.netlify.app/",
     featured: true,
-    colorFrom: "#00f0ff",
-    colorTo: "#bc13fe",
-  },
-  {
-    title: "Habit Flow",
-    description:
-      "Full-stack habit tracking web application supporting 100+ concurrent users with secure authentication, session management, and optimized CRUD operations.",
-    technologies: ["HTML5", "CSS3", "JavaScript", "PHP", "MySQL", "Apache"],
-    github: "https://github.com/aryancodes12-bit",
-    live: "https://habitflow-pro.rf.gd/",
-    featured: true,
     colorFrom: "#bc13fe",
-    colorTo: "#ff007f",
-  },
-  {
-    title: "DSA Progress Tracker",
-    description:
-      "Serverless web application to track 500+ DSA problems across 10+ categories with real-time updates, Firebase authentication, and interactive analytics dashboards.",
-    technologies: ["Firebase", "Firestore", "Chart.js", "JavaScript"],
-    github: "https://github.com/aryancodes12-bit",
-    live: "https://dsa-progress-tracker-app.vercel.app/",
-    featured: true,
-    colorFrom: "#ff007f",
-    colorTo: "#00f0ff",
-  },
-  {
-    title: "SONIX – Simple Music Streaming",
-    description:
-      "A clean and responsive music streaming web application with modern UI, hover effects, and smooth interactions inspired by real-world design systems.",
-    technologies: ["HTML", "CSS", "JavaScript", "Tailwind CSS"],
-    github: "https://github.com/aryancodes12-bit/SONIX",
-    live: "https://sonixmusic.vercel.app/",
-    featured: true,
-    colorFrom: "#00f0ff",
     colorTo: "#ff007f",
   },
   {
@@ -70,7 +48,7 @@ const projects: Project[] = [
     github: "https://github.com/aryancodes12-bit/sortmyscene-booking-system",
     live: "https://seat-sync-rho.vercel.app/",
     featured: true,
-    colorFrom: "#bc13fe",
+    colorFrom: "#ff007f",
     colorTo: "#00f0ff",
   },
   {
@@ -80,17 +58,6 @@ const projects: Project[] = [
     technologies: ["React", "Firebase", "Tailwind CSS", "Framer Motion", "Gemini AI"],
     github: "https://github.com/aryancodes12-bit/SAARTHI-AI",
     live: "https://saarthi-ai-mu.vercel.app/",
-    featured: true,
-    colorFrom: "#ff007f",
-    colorTo: "#bc13fe",
-  },
-  {
-    title: "MoodMate – AI Mental Wellness App",
-    description:
-      "AI-powered wellness companion offering mood journaling, an AI chat companion, mood prediction, weekly therapy plans, and community support built on React and Supabase.",
-    technologies: ["React", "Supabase", "Groq API", "Tailwind CSS"],
-    github: "https://github.com/aryancodes12-bit/moodmate",
-    live: "https://moodmate-web.vercel.app/",
     featured: true,
     colorFrom: "#00f0ff",
     colorTo: "#bc13fe",

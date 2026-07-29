@@ -16,7 +16,7 @@ const quickActions = [
   {
     label: "View Resume",
     icon: FileText,
-    href: "https://drive.google.com/file/d/1j8lGotieS-eDW4cbFLdlTV_BXzXiI55o/view?usp=drive_link",
+    href: "/Aryan_Jaiswal_Resume.pdf",
     primary: true,
   },
   {
@@ -28,7 +28,7 @@ const quickActions = [
   {
     label: "LeetCode",
     icon: Code2,
-    href: "#",
+    href: "https://leetcode.com/u/aryancodes_/",
     primary: false,
   },
   {
