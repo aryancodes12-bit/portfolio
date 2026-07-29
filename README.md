@@ -1,36 +1,238 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌐 Personal Portfolio
 
-## Getting Started
+<div align="center">
 
-First, run the development server:
+![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)
+![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=tailwindcss)
+![Framer Motion](https://img.shields.io/badge/Framer_Motion-black?style=for-the-badge&logo=framer)
+![Vercel](https://img.shields.io/badge/Vercel-Deployed-black?style=for-the-badge&logo=vercel)
+
+### A modern, responsive and animated developer portfolio showcasing projects, technical skills, experience, and achievements.
+
+### 🔗 **Live Demo:** [https://your-portfolio.vercel.app](https://portfolio-one-gules-fxxz8g237e.vercel.app/)
+
+</div>
+
+---
+
+## 📖 Overview
+
+This portfolio serves as my digital presence, highlighting my software engineering journey through carefully crafted UI, interactive animations, and production-ready web technologies.
+
+The website focuses on delivering an engaging user experience while maintaining excellent performance, accessibility, and responsiveness across all devices.
+
+---
+
+## ✨ Features
+
+- 🎨 Modern & Minimal UI
+- 🌙 Dark Theme
+- ⚡ Lightning Fast Performance
+- 📱 Fully Responsive Design
+- 🎬 Smooth Page Animations
+- ✨ Interactive Hover Effects
+- 💼 Featured Projects Showcase
+- 🧑‍💻 Technical Skills Section
+- 📈 Experience Timeline
+- 📄 Resume Download
+- 📬 Contact Section
+- 🔍 SEO Optimized
+- ♿ Accessibility Friendly
+
+---
+
+## 🛠 Tech Stack
+
+### Frontend
+
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- Framer Motion
+
+### Deployment
+
+- Vercel
+
+### Development Tools
+
+- VS Code
+- Git
+- GitHub
+- ESLint
+- Prettier
+
+---
+
+## 📂 Project Structure
+
+```text
+portfolio/
+│
+├── app/
+├── components/
+├── hooks/
+├── lib/
+├── public/
+│   ├── images/
+│   ├── icons/
+│   └── resume.pdf
+├── styles/
+├── utils/
+├── package.json
+└── README.md
+```
+
+---
+
+## 📸 Preview
+
+### Landing Page
+
+> Add a screenshot or GIF here.
+
+```md
+![Portfolio Preview](./public/preview.png)
+```
+
+---
+
+## 🎬 Animations
+
+The portfolio includes multiple animations for an engaging experience:
+
+- Hero entrance animations
+- Scroll reveal effects
+- Interactive project cards
+- Hover transitions
+- Smooth section navigation
+- Animated buttons
+- Floating UI elements
+- Loading transitions
+
+---
+
+## 🚀 Performance
+
+Designed with performance as a priority.
+
+- ⚡ Server Components
+- ⚡ Optimized Images
+- ⚡ Lazy Loading
+- ⚡ Code Splitting
+- ⚡ SEO Friendly
+- ⚡ Fast Initial Load
+
+---
+
+## 📱 Responsive Design
+
+Optimized for:
+
+- Desktop
+- Laptop
+- Tablet
+- Mobile
+
+---
+
+## 🚀 Getting Started
+
+Clone the repository.
+
+```bash
+git clone https://github.com/your-username/portfolio.git
+```
+
+Move into the project.
+
+```bash
+cd portfolio
+```
+
+Install dependencies.
+
+```bash
+npm install
+```
+
+Start the development server.
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🏗 Build
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Run production server.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm start
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📊 Lighthouse Goals
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Category | Target |
+|----------|:------:|
+| Performance | ⭐⭐⭐⭐⭐ |
+| Accessibility | ⭐⭐⭐⭐⭐ |
+| Best Practices | ⭐⭐⭐⭐⭐ |
+| SEO | ⭐⭐⭐⭐⭐ |
+
+---
+
+## 🌟 Future Improvements
+
+- Blog Integration
+- Visitor Analytics
+- AI Chat Assistant
+- Multi-language Support
+- CMS Integration
+- Theme Customization
+- More Interactive Visualizations
+
+---
+
+## 🤝 Contributing
+
+Contributions, suggestions, and feedback are always welcome.
+
+If you'd like to improve the project:
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+<div align="center">
+
+### ⭐ If you like this project, consider giving it a star!
+
+Made with ❤️ by **Aryan Jaiswal**
+
+</div>
