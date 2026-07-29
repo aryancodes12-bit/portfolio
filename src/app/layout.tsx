@@ -1,48 +1,66 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono, Bricolage_Grotesque, Space_Grotesk } from "next/font/google";
-import { ScrollProgress } from "@/components/ui/ScrollProgress";
+import React from "react";
+import { Metadata } from "next";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const bricolage = Bricolage_Grotesque({
-  variable: "--font-bricolage",
-  subsets: ["latin"],
-  weight: ["200", "300", "400", "500", "600", "700", "800"],
-});
+import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
+import TopNav from "@/components/ui/TopNav";
+import NavigationDock from "@/components/sections/NavigationDock";
 
 const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-space",
+  weight: ["500", "700"],
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
+
+const jetbrains = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains",
+  weight: "400",
 });
 
 export const metadata: Metadata = {
-  title: "Aryan Jaiswal | Full Stack Developer & Designer",
-  description: "Explore the portfolio of Aryan Jaiswal - Full Stack Developer specializing in React, Node.js, and modern web technologies.",
+  title: "AJ's Portfolio",
+  description: "Showcasing high‑impact engineering work",
+  openGraph: {
+    title: "AJ - Full‑Stack Engineer Portfolio",
+    description: "Explore projects, labs, and analytics.",
+    url: "https://ajportfolio.com",
+    images: ["/og-image.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AJ Portfolio",
+    description: "Full‑stack engineer with AI expertise",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${bricolage.variable} ${spaceGrotesk.variable} h-full scroll-smooth antialiased`}
-    >
-      <body className="min-h-full bg-background text-foreground flex flex-col">
-        <ScrollProgress />
-        {children}
+    <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrains.variable}`}>
+      <body className="bg-zinc-950 text-zinc-100 antialiased selection:bg-primary/30" suppressHydrationWarning>
+        {/* Skip link for accessibility */}
+        <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-zinc-800 text-white px-3 py-2 rounded shadow-lg z-50">
+          Skip to content
+        </a>
+        {/* Top navigation (handles its own route visibility check) */}
+        <TopNav />
+        {/* Navigation Dock */}
+        <NavigationDock />
+        {/* Main app root for scroll targets */}
+        <div id="app-root" className="relative">
+          <main id="main-content" className="relative">
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   );

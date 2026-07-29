@@ -1,4 +1,3 @@
-import { NavigationDock } from "@/components/sections/NavigationDock";
 import { Hero } from "@/components/sections/Hero";
 import { About } from "@/components/sections/About";
 import { Skills } from "@/components/sections/Skills";
@@ -14,7 +13,7 @@ export default function Home() {
     <div className="relative min-h-screen bg-transparent w-full">
       <AuroraBackground />
       <TargetCursor />
-      <NavigationDock />
+      {/* NavigationDock is now rendered globally in layout.tsx */}
       <main className="relative z-10 flex flex-col w-full">
         <ScrollReveal direction="up" delay={0.2}>
           <Hero />

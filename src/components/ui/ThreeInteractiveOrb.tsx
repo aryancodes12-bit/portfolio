@@ -13,10 +13,7 @@ export function ThreeInteractiveOrb() {
     const container = containerRef.current;
     if (!canvas || !container) return;
 
-    // Disable on mobile/tablets for performance
-    if (typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches) {
-      return;
-    }
+    const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches;
 
     let width = container.clientWidth;
     let height = container.clientHeight;
@@ -26,19 +23,19 @@ export function ThreeInteractiveOrb() {
 
     // Camera
     const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 100);
-    camera.position.z = 8;
+    camera.position.z = isMobile ? 10 : 8;
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({
       canvas: canvas,
       alpha: true,
-      antialias: true,
+      antialias: !isMobile,
     });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
 
     // Particle Sphere Geometry
-    const particleCount = 1800;
+    const particleCount = isMobile ? 400 : 1800;
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const originalPositions = new Float32Array(particleCount * 3);
@@ -238,7 +235,7 @@ export function ThreeInteractiveOrb() {
   return (
     <div 
       ref={containerRef} 
-      className="absolute top-0 right-0 w-full md:w-[50%] h-[100vh] pointer-events-none select-none z-10 flex items-center justify-center overflow-hidden"
+      className="absolute inset-0 md:inset-auto md:top-0 md:right-0 w-full md:w-[50%] h-[100vh] pointer-events-none select-none z-0 md:z-10 flex items-center justify-center overflow-hidden opacity-30 md:opacity-100"
     >
       <canvas 
         ref={canvasRef} 

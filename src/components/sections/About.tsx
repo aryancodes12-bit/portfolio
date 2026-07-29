@@ -1,15 +1,15 @@
 "use client";
 
-import React from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { BorderBeam } from "@/components/magicui/border-beam";
 import { Briefcase, GraduationCap, MapPin, Calendar } from "lucide-react";
 
 const highlights = [
-  { icon: Briefcase, label: "Experience", value: "2+ Years" },
-  { icon: GraduationCap, label: "Education", value: "B.Tech in IT" },
-  { icon: MapPin, label: "Location", value: "Open to Remote" },
-  { icon: Calendar, label: "Availability", value: "Immediate" },
+  { icon: Briefcase, label: "Experience", value: "2+", suffix: " Years" },
+  { icon: GraduationCap, label: "Education", value: "B.Tech", suffix: " IT" },
+  { icon: MapPin, label: "Location", value: "Open", suffix: " to Remote" },
+  { icon: Calendar, label: "Availability", value: "Immediate", suffix: "" },
 ];
 
 const bioParas = [
@@ -27,7 +27,61 @@ const cardVariants = {
   }),
 };
 
+// Animated number that counts up when scrolled into view
+function CountUp({ value, suffix }: { value: string; suffix: string }) {
+  const numericValue = parseInt(value.replace(/\D/g, ""), 10);
+  const isNumeric = !isNaN(numericValue);
+  const [display, setDisplay] = useState(isNumeric ? "0" : value);
+  const ref = useRef<HTMLSpanElement>(null);
+  const started = useRef(false);
+
+  useEffect(() => {
+    if (!isNumeric) return;
+    const el = ref.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !started.current) {
+          started.current = true;
+          let current = 0;
+          const step = Math.max(1, Math.ceil(numericValue / 30));
+          const interval = setInterval(() => {
+            current = Math.min(current + step, numericValue);
+            setDisplay(String(current));
+            if (current >= numericValue) clearInterval(interval);
+          }, 40);
+        }
+      },
+      { threshold: 0.5 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [isNumeric, numericValue]);
+
+  return (
+    <span ref={ref} className="font-black tabular-nums">
+      {display}
+      {isNumeric && suffix}
+    </span>
+  );
+}
+
 export function About() {
+  const [easterEgg, setEasterEgg] = useState(false);
+  const clickCount = useRef(0);
+  const clickTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleTripleClick = () => {
+    clickCount.current += 1;
+    if (clickTimer.current) clearTimeout(clickTimer.current);
+    clickTimer.current = setTimeout(() => { clickCount.current = 0; }, 500);
+    if (clickCount.current >= 3) {
+      setEasterEgg(true);
+      clickCount.current = 0;
+    }
+  };
+
   return (
     <section
       id="about"
@@ -52,7 +106,9 @@ export function About() {
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             custom={0}
-            className="relative rounded-2xl border border-zinc-800 bg-zinc-950/70 p-8 backdrop-blur-md overflow-hidden"
+            className="relative rounded-2xl border border-zinc-800 bg-zinc-950/70 p-8 backdrop-blur-md overflow-hidden cursor-default"
+            onClick={handleTripleClick}
+            title="Triple-click for a surprise..."
           >
             <BorderBeam size={140} duration={8} colorFrom="#00f0ff" colorTo="#bc13fe" delay={0} />
             <p className="font-mono text-[10px] tracking-widest text-secondary uppercase mb-4">
@@ -63,6 +119,30 @@ export function About() {
                 {para}
               </p>
             ))}
+
+            {/* Easter egg */}
+            {easterEgg && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mt-6 rounded-xl border border-primary/20 bg-primary/5 p-4"
+              >
+                <p className="font-mono text-[10px] text-primary tracking-widest mb-2">// fun fact</p>
+                <pre className="text-xs text-zinc-300 font-mono leading-relaxed overflow-x-auto">{`const aryan = {
+  hobbies: ["competitive coding", "system design", "chess"],
+  currentlyLearning: "Rust",
+  favoriteAlgo: "Dijkstra's",
+  coffeeCupsPerDay: 3,
+  motto: "Ship it, then make it elegant."
+};`}</pre>
+                <button
+                  className="mt-3 text-[10px] font-mono text-zinc-600 hover:text-zinc-400 transition-colors"
+                  onClick={(e) => { e.stopPropagation(); setEasterEgg(false); }}
+                >
+                  [close]
+                </button>
+              </motion.div>
+            )}
           </motion.div>
 
           {/* Highlight cards grid */}
@@ -86,11 +166,15 @@ export function About() {
                     colorTo={i % 2 === 0 ? "#bc13fe" : "#00f0ff"}
                     delay={i * 1.5}
                   />
-                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 mb-4">
-                    <Icon className="w-6 h-6 text-primary" />
+                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 mb-4 group-hover:bg-primary/20 transition-colors">
+                    <Icon className="w-6 h-6 text-primary" aria-hidden="true" />
                   </div>
-                  <p className="text-zinc-500 text-xs font-mono tracking-widest uppercase mb-1">{item.label}</p>
-                  <p className="text-zinc-100 font-bold text-base">{item.value}</p>
+                  <p className="text-zinc-500 text-xs font-mono tracking-widest uppercase mb-1">
+                    {item.label}
+                  </p>
+                  <p className="text-zinc-100 text-base">
+                    <CountUp value={item.value} suffix={item.suffix} />
+                  </p>
                 </motion.div>
               );
             })}

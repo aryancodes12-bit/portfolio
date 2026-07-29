@@ -111,7 +111,7 @@ export function Skills() {
         </div>
 
         {/* Category pills grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 mb-10">
           {skillCategories.map((cat) => (
             <div
               key={cat.title}
@@ -128,25 +128,33 @@ export function Skills() {
         <div className="relative flex flex-col gap-4 w-full py-6 overflow-hidden rounded-3xl border border-zinc-900 bg-zinc-950/40 backdrop-blur-sm">
           <Marquee className="[--duration:30s]" pauseOnHover>
             {row1.map((item, i) => (
-              <div
+              <button
                 key={`${item.skill}-${i}`}
-                className={`flex items-center gap-2 rounded-2xl border ${item.borderColor} bg-zinc-950 px-5 py-3 text-sm font-mono text-zinc-300 hover:text-white transition-colors duration-300 shadow-sm`}
+                onClick={() => {
+                  navigator.clipboard.writeText(item.skill);
+                }}
+                title={`Click to copy "${item.skill}"`}
+                className={`flex items-center gap-2 rounded-2xl border ${item.borderColor} bg-zinc-950 px-5 py-3 text-sm font-mono text-zinc-300 hover:text-white hover:border-primary/50 hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer group`}
               >
-                <span className={`text-xs ${item.color} font-bold uppercase`}>{item.category[0]}</span>
+                <span className={`text-xs ${item.color} font-bold uppercase group-hover:scale-110 transition-transform`}>{item.category[0]}</span>
                 <span className="font-bold">{item.skill}</span>
-              </div>
+              </button>
             ))}
           </Marquee>
 
           <Marquee className="[--duration:30s]" reverse pauseOnHover>
             {row2.map((item, i) => (
-              <div
+              <button
                 key={`${item.skill}-${i}`}
-                className={`flex items-center gap-2 rounded-2xl border ${item.borderColor} bg-zinc-950 px-5 py-3 text-sm font-mono text-zinc-300 hover:text-white transition-colors duration-300 shadow-sm`}
+                onClick={() => {
+                  navigator.clipboard.writeText(item.skill);
+                }}
+                title={`Click to copy "${item.skill}"`}
+                className={`flex items-center gap-2 rounded-2xl border ${item.borderColor} bg-zinc-950 px-5 py-3 text-sm font-mono text-zinc-300 hover:text-white hover:border-primary/50 hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer group`}
               >
-                <span className={`text-xs ${item.color} font-bold uppercase`}>{item.category[0]}</span>
+                <span className={`text-xs ${item.color} font-bold uppercase group-hover:scale-110 transition-transform`}>{item.category[0]}</span>
                 <span className="font-bold">{item.skill}</span>
-              </div>
+              </button>
             ))}
           </Marquee>
 

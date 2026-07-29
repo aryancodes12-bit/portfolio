@@ -28,17 +28,17 @@
 body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
-  font-family: var(--font-space-grotesk), var(--font-sans), sans-serif;
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-bricolage), var(--font-sans), sans-serif;
+  font-family: var(--font-space), var(--font-inter), sans-serif;
 }
 
 @theme {
-  --font-sans: var(--font-space-grotesk), var(--font-sans), sans-serif;
-  --font-display: var(--font-bricolage), sans-serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-space), sans-serif;
 
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
@@ -76,6 +76,9 @@ h1, h2, h3, h4, h5, h6 {
   --animate-aurora-3: aurora-3 24s ease-in-out infinite;
   --animate-aurora-4: aurora-4 28s ease-in-out infinite;
   --animate-shiny-shimmer: shine 3s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-glow-pulse: glow-pulse 2s ease-in-out infinite;
+  --font-mono: var(--font-jetbrains), 'JetBrains Mono', ui-monospace, monospace;
 
   @keyframes shine {
     0% {
@@ -171,6 +174,29 @@ h1, h2, h3, h4, h5, h6 {
       transform: translateY(calc(var(--grid-row-size, 60px) * 2));
     }
   }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 5px rgba(0, 240, 255, 0.3); }
+    50% { box-shadow: 0 0 25px rgba(0, 240, 255, 0.7), 0 0 50px rgba(0, 240, 255, 0.3); }
+  }
+
+  @keyframes code-rain {
+    0% { opacity: 0; transform: translateY(-10px); }
+    15% { opacity: 0.5; }
+    85% { opacity: 0.5; }
+    100% { opacity: 0; transform: translateY(10px); }
+  }
+}
+
+/* Selection styles */
+::selection {
+  background-color: rgba(0, 240, 255, 0.15);
+  color: #ffffff;
 }
 
 /* Scrollbar customizations */
@@ -224,5 +250,32 @@ h1, h2, h3, h4, h5, h6 {
   to {
     transform: translateY(calc(-100% - var(--gap, 1rem)));
   }
+}
+
+/* Glow utility classes */
+.glow-primary-text {
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.5), 0 0 30px rgba(0, 240, 255, 0.2);
+}
+.glow-accent-text {
+  text-shadow: 0 0 10px rgba(255, 0, 127, 0.5), 0 0 30px rgba(255, 0, 127, 0.2);
+}
+.glow-primary-box {
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.25), 0 0 60px rgba(0, 240, 255, 0.08);
+}
+.glow-accent-box {
+  box-shadow: 0 0 20px rgba(255, 0, 127, 0.25), 0 0 60px rgba(255, 0, 127, 0.08);
+}
+
+/* Code rain characters used in Hero background */
+.code-rain-char {
+  animation: code-rain var(--duration, 3s) linear infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+/* Smooth focus ring for a11y */
+*:focus-visible {
+  outline: 2px solid rgba(0, 240, 255, 0.7);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
