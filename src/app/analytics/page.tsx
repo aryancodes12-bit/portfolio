@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, BarChart3, TrendingUp, Code2, Coffee, GitCommit, Star, Zap, Globe } from "lucide-react";
 
 const stats = [
-  { label: "Projects Shipped", value: "5+", icon: Zap, color: "#00f0ff", desc: "Production apps built end-to-end" },
+  { label: "Projects Shipped", value: "6+", icon: Zap, color: "#00f0ff", desc: "Production apps built end-to-end" },
   { label: "GitHub Commits", value: "500+", icon: GitCommit, color: "#bc13fe", desc: "Across open-source & private repos" },
   { label: "Technologies", value: "20+", icon: Code2, color: "#ff007f", desc: "Languages, frameworks & tools mastered" },
   { label: "Stars Earned", value: "50+", icon: Star, color: "#ff9500", desc: "Community recognition on GitHub" },
@@ -24,6 +24,7 @@ const techUsage = [
 ];
 
 const timeline = [
+  { year: "2026", event: "LearnHub – 1st Runner-Up hackathon winner & text-grounded AI study assistant", type: "project" },
   { year: "2026", event: "SeatSync – Production-grade MERN booking platform with atomic concurrency", type: "project" },
   { year: "2026", event: "LeetWeave Scribe – Dual-runtime LeetCode → GitHub automation tool", type: "project" },
   { year: "2025", event: "PlacementOS – AI-assisted unified placement prep system", type: "project" },
