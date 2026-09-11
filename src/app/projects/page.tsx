@@ -202,6 +202,13 @@ export default function ProjectsPage() {
                         </div>
                       </div>
 
+                      {project.badge && (
+                        <div className="mb-2">
+                          <span className="inline-block text-[10px] font-mono text-amber-300 bg-amber-500/10 border border-amber-500/30 rounded-md px-2 py-0.5">
+                            {project.badge}
+                          </span>
+                        </div>
+                      )}
                       <h2 className="text-lg font-bold tracking-tight text-zinc-100 mb-1">
                         {project.title}
                       </h2>

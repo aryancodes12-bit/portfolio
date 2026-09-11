@@ -13,6 +13,17 @@ export interface DiagramEdge {
   label?: string;
 }
 
+export interface WhatsNewItem {
+  title: string;
+  description: string;
+}
+
+export interface MetricItem {
+  label: string;
+  value: string;
+  desc?: string;
+}
+
 export interface Project {
   slug: string;
   title: string;
@@ -30,6 +41,9 @@ export interface Project {
   year: string;
   diagramNodes?: DiagramNode[];
   diagramEdges?: DiagramEdge[];
+  badge?: string;
+  whatsNew?: WhatsNewItem[];
+  metrics?: MetricItem[];
 }
 
 export const allProjects: Project[] = [
@@ -59,6 +73,7 @@ export const allProjects: Project[] = [
     colorTo: "#00f0ff",
     categories: ["TypeScript", "React", "Full-Stack", "AI", "Node.js"],
     year: "2026",
+    badge: "🥈 1ST RUNNER-UP — University Hackathon Winner",
     highlights: [
       "1st Runner-Up Hackathon Winner built and shipped under a strict 2-hour constraint",
       "Server-side document parsing (pdf-parse & mammoth) extracting text for Groq Llama 3.3 AI",
@@ -255,27 +270,142 @@ export const allProjects: Project[] = [
   },
   {
     slug: "saarthi-ai",
-    title: "SaarthiAI – AI Insurance Companion",
-    tagline: "Bias-aware, DPDP 2023 compliant AI insurance advisor",
+    title: "SaarthiAI V2 – AI Insurance Advisory Platform",
+    tagline: "India's AI-native insurance advisory platform · Top 10 / 300+ teams at National Hackathon 2026",
     description:
-      "Bias-aware, DPDP 2023 aligned AI insurance advisory platform with life-event detection, policy comparison, bilingual chat advisor, and a privacy-first PII masking layer.",
+      "Top 10 / 300+ teams (National Hackathon 2026): Full-stack AI insurance platform built for Bharat with Groq Llama 3.3 70B, DPDP 2023 compliance, 99-product IRDAI catalog, and multi-channel marketing automation.",
     longDescription:
-      `SaarthiAI addresses a real gap in financial advisory — most insurance recommendation tools are opaque and data-hungry. Saarthi is privacy-first by design, fully compliant with India's Digital Personal Data Protection Act 2023.\n\nThe platform automatically detects life events (marriage, new child, retirement) from conversational user input and proactively surfaces relevant policy recommendations. A bilingual chat advisor (English + Hindi) powered by Gemini AI provides contextual guidance. A dedicated PII masking layer strips sensitive personal data before it ever reaches the AI model.\n\nPolicy comparison mode shows side-by-side comparisons with a bias scoring overlay that flags products with demographic-correlated pricing disparities.`,
-    technologies: ["React", "Firebase", "Tailwind CSS", "Framer Motion", "Gemini AI"],
-    github: "https://github.com/aryancodes12-bit/SAARTHI-AI",
-    live: "https://saarthi-ai-mu.vercel.app/",
+      `SaarthiAI V2 is a full-stack, AI-native insurance advisory platform engineered for Bharat — built, shipped, and ranked Top 10 out of 300+ teams in 48 hours at a National Level Hackathon in 2026.\n\nUnlike superficial chatbot wrappers, SaarthiAI V2 addresses the 400M+ underinsured population in India through a multi-tier production architecture. The system ingests natural language queries in Hindi, English, and Hinglish, detects 8 core life events (marriage, newborn baby, home purchase, new job, retirement, health diagnosis, vehicle purchase, business startup), and maps users into 5 coverage gap segments.\n\nRecommendations are retrieved from a verified catalog of 99 Indian insurance products across 45+ insurers and 5 categories (Health, Term Life, Motor, Property, Retirement), enriched with official IRDAI Claim Settlement Ratios (CSR). Real-time premium estimation factors in 8 actuarial parameters with dynamic Recharts area charts, while a 4-stage Claims Tracker manages claim lifecycles with complete audit logging.\n\nPrivacy and ethics are baked into the core: a DPDP 2023 compliant PII masking layer strips 6 sensitive data types (Aadhaar, PAN, email, phone, name, DOB) before sending context to Groq's Llama 3.3 70B model. Every AI generation is passed through 3 fairness rules to eliminate gender, caste, and demographic bias.\n\nA serverless automation engine powered by 6 Firebase Cloud Functions triggers personalized, cooldown-protected multi-channel outreach across WhatsApp (Twilio/TextMeBot), SMS (Fast2SMS/TextBee), Email (Nodemailer/EmailJS), Push notifications (OneSignal), and voice calls (Vapi AI). The frontend is built on React 19 and Vite with an Indian cultural design system tokens (raat, diya, dhoop, megh, sindoor, safed) and an interactive SVG life journey path.`,
+    technologies: [
+      "React 19",
+      "Vite",
+      "Tailwind CSS",
+      "Groq API",
+      "Llama 3.3 70B",
+      "Firebase Auth",
+      "Cloud Firestore",
+      "Cloud Functions",
+      "Twilio",
+      "Fast2SMS",
+      "Vapi AI",
+      "Recharts",
+      "Framer Motion",
+    ],
+    github: "https://github.com/aryancodes12-bit/SAARTHI-AI-V2",
+    live: "https://saarthi-ai-v2.vercel.app/",
     featured: true,
-    colorFrom: "#00f0ff",
-    colorTo: "#bc13fe",
-    categories: ["React", "AI", "Full-Stack"],
-    year: "2025",
+    colorFrom: "#f2a93b",
+    colorTo: "#ff007f",
+    categories: ["React", "AI", "Full-Stack", "Node.js"],
+    year: "2026",
+    badge: "🏆 TOP 10 / 300+ TEAMS — National Level Hackathon 2026",
+    metrics: [
+      { label: "Hackathon Rank", value: "Top 10" },
+      { label: "Teams Competed", value: "300+" },
+      { label: "Insurance Products", value: "99" },
+      { label: "Partner Insurers", value: "45+" },
+      { label: "Cloud Functions", value: "6" },
+      { label: "Delivery Channels", value: "8" },
+    ],
+    whatsNew: [
+      {
+        title: "Groq Llama 3.3 70B Engine",
+        description: "Migrated to high-throughput Groq Llama 3.3 70B for natural language bilingual chat, life-event detection, and marketing copy generation.",
+      },
+      {
+        title: "99-Product IRDAI Catalog",
+        description: "Curated 99 real Indian insurance policies across 45+ insurers with official CSR ratios, network hospital counts, and official insurer links.",
+      },
+      {
+        title: "8 Life Event Detectors",
+        description: "Detects marriage, new baby, home purchase, new job, retirement, health crisis, vehicle, and business startup from conversational Hinglish.",
+      },
+      {
+        title: "Multi-Channel Marketing Automation",
+        description: "6 Firebase Cloud Functions trigger contextual outreach via WhatsApp (Twilio), SMS (Fast2SMS), Email (Nodemailer), Push, and Vapi AI Voice.",
+      },
+      {
+        title: "DPDP 2023 Architectural Privacy Layer",
+        description: "Pre-AI PII masking for 6 data types (Aadhaar, PAN, phone, email, DOB, name) plus 5 granular consent toggles and an immutable audit log.",
+      },
+      {
+        title: "Responsible AI Bias Auditing",
+        description: "3 non-negotiable fairness rules injected into system prompts and evaluated on responses to prevent gender, caste, or demographic bias.",
+      },
+      {
+        title: "Indian Cultural Design Tokens",
+        description: "Handcrafted design palette (raat, diya, dhoop, megh, sindoor, safed), bilingual IBM Plex typography, and SVG life journey path.",
+      },
+      {
+        title: "Claims Tracker & Actuarial Calculator",
+        description: "End-to-end 4-stage claims lifecycle management with timeline audits and real-time premium projections with IRDAI regulatory disclaimers.",
+      },
+    ],
     highlights: [
-      "DPDP Act 2023 compliant privacy architecture",
-      "Life-event detection from conversational input (marriage, child, retirement)",
-      "Bilingual (English + Hindi) AI chat powered by Gemini",
-      "PII masking layer before data reaches AI model",
-      "Side-by-side policy comparison with bias scoring overlay",
-      "Firebase auth + real-time Firestore sync",
+      "Ranked Top 10 out of 300+ teams at a national-level hackathon (built & shipped in 48 hours)",
+      "Bilingual AI chat (Hindi + English) powered by Groq Llama 3.3 70B with 8 life-event detectors",
+      "99 real Indian insurance products from 45+ insurers with IRDAI claim settlement data",
+      "Multi-channel marketing automation engine dispatching WhatsApp, SMS, Email, Push & AI Voice",
+      "Architectural DPDP 2023 compliance with 6-type PII masking & granular consent audit logs",
+      "6 serverless Firebase Cloud Functions with anti-spam cooldown rules and claims workflow tracking",
+    ],
+    diagramNodes: [
+      {
+        id: "client",
+        label: "React 19 + Vite",
+        description: "Bilingual UI, 21 routes, life journey path & Recharts calculator",
+        x: 10,
+        y: 35,
+        color: "cyan",
+      },
+      {
+        id: "pii",
+        label: "DPDP PII Masker",
+        description: "Redacts Aadhaar, PAN, phone, email, name, DOB before model inference",
+        x: 35,
+        y: 35,
+        color: "green",
+      },
+      {
+        id: "groq",
+        label: "Groq Llama 3.3 70B",
+        description: "Detects 8 life events, classifies 5 user segments & generates advice",
+        x: 60,
+        y: 20,
+        color: "pink",
+      },
+      {
+        id: "db",
+        label: "Cloud Firestore",
+        description: "12+ collections: 99 products, claims, behavior logs & consent audits",
+        x: 60,
+        y: 60,
+        color: "purple",
+      },
+      {
+        id: "functions",
+        label: "Cloud Functions",
+        description: "6 Node 24 serverless triggers with anti-spam cooldown logic",
+        x: 85,
+        y: 60,
+        color: "orange",
+      },
+      {
+        id: "channels",
+        label: "Omnichannel APIs",
+        description: "WhatsApp (Twilio), SMS (Fast2SMS), Email, Push & Vapi AI Voice",
+        x: 90,
+        y: 20,
+        color: "cyan",
+      },
+    ],
+    diagramEdges: [
+      { from: "client", to: "pii", label: "sanitize prompt" },
+      { from: "pii", to: "groq", label: "masked context" },
+      { from: "groq", to: "client", label: "bias-checked stream" },
+      { from: "client", to: "db", label: "sync claims & quotes" },
+      { from: "db", to: "functions", label: "onWrite triggers" },
+      { from: "functions", to: "channels", label: "automated dispatch" },
     ],
   },
   {
@@ -333,5 +463,9 @@ export const allProjects: Project[] = [
 export const featuredProjects = allProjects.filter((p) => p.featured);
 
 export function getProjectBySlug(slug: string): Project | undefined {
-  return allProjects.find((p) => p.slug === slug);
+  return allProjects.find(
+    (p) =>
+      p.slug === slug ||
+      (slug === "saarthi-ai-v2" && p.slug === "saarthi-ai")
+  );
 }

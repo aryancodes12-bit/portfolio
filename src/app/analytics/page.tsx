@@ -25,10 +25,10 @@ const techUsage = [
 
 const timeline = [
   { year: "2026", event: "LearnHub – 1st Runner-Up hackathon winner & text-grounded AI study assistant", type: "project" },
+  { year: "2026", event: "SaarthiAI V2 – Top 10 nationally (300+ teams), Groq Llama 3.3 & DPDP 2023 platform", type: "project" },
   { year: "2026", event: "SeatSync – Production-grade MERN booking platform with atomic concurrency", type: "project" },
   { year: "2026", event: "LeetWeave Scribe – Dual-runtime LeetCode → GitHub automation tool", type: "project" },
   { year: "2025", event: "PlacementOS – AI-assisted unified placement prep system", type: "project" },
-  { year: "2025", event: "SaarthiAI – Bias-aware, DPDP 2023 compliant AI insurance advisor", type: "project" },
   { year: "2025", event: "Air Pollution Dashboard – Built at Bhartiya Antariksh Hackathon 2025", type: "project" },
   { year: "2024", event: "Started deep-dive into TypeScript, Node.js & full-stack architecture", type: "milestone" },
   { year: "2023", event: "First production React app — built & shipped solo", type: "milestone" },

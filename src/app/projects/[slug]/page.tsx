@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { motion } from "framer-motion";
-import { ArrowLeft, ExternalLink, Github, Sparkles, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, ExternalLink, Github, Sparkles, CheckCircle2, Trophy, Zap, BarChart2 } from "lucide-react";
 import { getProjectBySlug, allProjects } from "@/data/projects";
 import { use } from "react";
 
@@ -27,14 +27,22 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ slug: 
 
           {/* Header */}
           <div className="mb-10">
-            <span className="font-mono text-[10px] tracking-widest text-primary uppercase mb-2 block">// PROJECT DEEP DIVE</span>
+            <div className="flex flex-wrap items-center gap-3 mb-3">
+              <span className="font-mono text-[10px] tracking-widest text-primary uppercase block">// PROJECT DEEP DIVE</span>
+              {project.badge && (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-amber-500/40 bg-amber-500/10 text-amber-300 text-[11px] font-mono font-bold shadow-[0_0_15px_rgba(245,158,11,0.15)]">
+                  <Trophy className="h-3.5 w-3.5 text-amber-400" />
+                  {project.badge}
+                </span>
+              )}
+            </div>
             <h1 className="text-4xl md:text-6xl font-black tracking-tight text-white uppercase mb-3">{project.title}</h1>
             <p className="text-zinc-400 font-mono text-sm mb-4">{project.tagline}</p>
             <div className="h-1 w-20 rounded-full" style={{ background: `linear-gradient(to right, ${project.colorFrom}, ${project.colorTo})` }} />
           </div>
 
           {/* Actions */}
-          <div className="flex gap-3 mb-12">
+          <div className="flex gap-3 mb-10">
             <a href={project.github} target="_blank" rel="noopener noreferrer"
               className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-zinc-800 text-zinc-300 hover:text-white hover:border-primary/40 text-sm font-mono transition-all">
               <Github className="h-4 w-4" /> GitHub
@@ -44,6 +52,39 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ slug: 
               <ExternalLink className="h-4 w-4" /> Live Demo
             </a>
           </div>
+
+          {/* Key Metrics if available */}
+          {project.metrics && project.metrics.length > 0 && (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 mb-8">
+              {project.metrics.map((metric) => (
+                <div key={metric.label} className="rounded-xl border border-zinc-800 bg-zinc-900/40 p-3.5 text-center">
+                  <p className="text-xl md:text-2xl font-black font-mono text-primary">{metric.value}</p>
+                  <p className="text-[10px] font-mono text-zinc-400 mt-1 uppercase tracking-wider">{metric.label}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* What's New Section if available */}
+          {project.whatsNew && project.whatsNew.length > 0 && (
+            <div className="rounded-2xl border border-primary/30 bg-primary/5 p-6 md:p-8 mb-8 relative overflow-hidden">
+              <div className="absolute -top-12 -right-12 w-48 h-48 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+              <h2 className="text-lg font-bold text-white mb-5 font-mono uppercase tracking-wide flex items-center gap-2">
+                <Zap className="h-4 w-4 text-primary" /> What&apos;s New in Version 2
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {project.whatsNew.map((item, idx) => (
+                  <div key={idx} className="rounded-xl border border-zinc-800/80 bg-zinc-950/70 p-4">
+                    <p className="text-sm font-bold text-zinc-100 font-mono mb-1.5 flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
+                      {item.title}
+                    </p>
+                    <p className="text-xs text-zinc-400 leading-relaxed">{item.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Long description */}
           <div className="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-6 md:p-8 mb-8">
