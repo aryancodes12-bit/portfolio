@@ -1,12 +1,10 @@
-"use client";
-
 import React from "react";
 
 export function AuroraBackground() {
   return (
-    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-[#0a0a0f]">
-      {/* Soft Aurora glow layers */}
-      <div className="absolute -inset-[20px] opacity-35 filter blur-[120px] md:blur-[160px]">
+    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-[#0a0a0f]" aria-hidden="true">
+      {/* Soft Aurora glow layers — optimized blur and composite layer */}
+      <div className="absolute -inset-[20px] opacity-35 filter blur-[80px] md:blur-[120px] will-change-transform transform-gpu">
         {/* Cyan/Teal glow */}
         <div className="absolute top-[-10%] left-[-10%] w-[70vw] h-[60vh] rounded-full bg-primary/30 mix-blend-screen animate-aurora-1" />
         
