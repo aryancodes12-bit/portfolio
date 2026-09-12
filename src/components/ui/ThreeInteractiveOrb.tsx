@@ -7,16 +7,20 @@ export function ThreeInteractiveOrb() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameId = useRef<number>(0);
+  const isVisible = useRef<boolean>(true);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const container = containerRef.current;
     if (!canvas || !container) return;
 
-    const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches;
+    const isMobile =
+      typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches;
+    const isCoarsePointer =
+      typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
 
-    let width = container.clientWidth;
-    let height = container.clientHeight;
+    let width = container.clientWidth || 500;
+    let height = container.clientHeight || 500;
 
     // Scene
     const scene = new THREE.Scene();
@@ -25,17 +29,18 @@ export function ThreeInteractiveOrb() {
     const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 100);
     camera.position.z = isMobile ? 10 : 8;
 
-    // Renderer
+    // Renderer - capped pixel ratio for buttery 60fps
     const renderer = new THREE.WebGLRenderer({
       canvas: canvas,
       alpha: true,
       antialias: !isMobile,
+      powerPreference: "high-performance",
     });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
 
     // Particle Sphere Geometry
-    const particleCount = isMobile ? 400 : 1800;
+    const particleCount = isMobile ? 350 : 1200;
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const originalPositions = new Float32Array(particleCount * 3);
@@ -44,7 +49,6 @@ export function ThreeInteractiveOrb() {
     const radius = 2.8;
 
     for (let i = 0; i < particleCount; i++) {
-      // Uniform distribution on sphere shell
       const u = Math.random();
       const v = Math.random();
       const theta = u * 2.0 * Math.PI;
@@ -68,7 +72,7 @@ export function ThreeInteractiveOrb() {
     geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
     geometry.setAttribute("scale", new THREE.BufferAttribute(randomScales, 1));
 
-    // Create a beautiful particle texture dynamically using Canvas
+    // Fast dynamic particle texture
     const createParticleTexture = () => {
       const size = 32;
       const canvasTex = document.createElement("canvas");
@@ -76,10 +80,17 @@ export function ThreeInteractiveOrb() {
       canvasTex.height = size;
       const ctx = canvasTex.getContext("2d");
       if (ctx) {
-        const gradient = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+        const gradient = ctx.createRadialGradient(
+          size / 2,
+          size / 2,
+          0,
+          size / 2,
+          size / 2,
+          size / 2
+        );
         gradient.addColorStop(0, "rgba(255, 255, 255, 1)");
-        gradient.addColorStop(0.2, "rgba(0, 240, 255, 0.8)"); // Primary Cyan glow
-        gradient.addColorStop(0.5, "rgba(188, 19, 254, 0.3)"); // Secondary Purple glow
+        gradient.addColorStop(0.2, "rgba(0, 240, 255, 0.8)");
+        gradient.addColorStop(0.5, "rgba(188, 19, 254, 0.3)");
         gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, size, size);
@@ -89,7 +100,6 @@ export function ThreeInteractiveOrb() {
 
     const particleTexture = createParticleTexture();
 
-    // Material
     const material = new THREE.PointsMaterial({
       size: 0.18,
       map: particleTexture,
@@ -98,12 +108,11 @@ export function ThreeInteractiveOrb() {
       depthWrite: false,
     });
 
-    // Points Mesh
     const pointsMesh = new THREE.Points(geometry, material);
     scene.add(pointsMesh);
 
-    // Add a light subtle internal wireframe globe to give volume
-    const innerGeometry = new THREE.IcosahedronGeometry(2.2, 2);
+    // Subtle internal wireframe globe
+    const innerGeometry = new THREE.IcosahedronGeometry(2.2, isMobile ? 1 : 2);
     const innerMaterial = new THREE.MeshBasicMaterial({
       color: 0x00f0ff,
       wireframe: true,
@@ -118,19 +127,25 @@ export function ThreeInteractiveOrb() {
     const mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
     const mouseWorld = new THREE.Vector3();
 
+    // PRE-ALLOCATED SCRATCH OBJECTS (Eliminates GC thrashing: 0 allocs per frame)
+    const scratchVec = new THREE.Vector3();
+    const scratchDir = new THREE.Vector3();
+    const rotationMatrix = new THREE.Matrix4();
+    const invRotation = new THREE.Matrix4();
+
     const handleMouseMove = (event: MouseEvent) => {
-      // Normalized mouse coord between -1 and 1
       mouse.targetX = (event.clientX / window.innerWidth) * 2 - 1;
       mouse.targetY = -(event.clientY / window.innerHeight) * 2 + 1;
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
+    if (!isCoarsePointer) {
+      window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    }
 
-    // Resize Handler
     const handleResize = () => {
       if (!container) return;
-      width = container.clientWidth;
-      height = container.clientHeight;
+      width = container.clientWidth || 500;
+      height = container.clientHeight || 500;
 
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
@@ -138,30 +153,35 @@ export function ThreeInteractiveOrb() {
       renderer.setSize(width, height);
     };
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener("resize", handleResize, { passive: true });
 
-    // Animation Loop
-    let clock = new THREE.Clock();
+    // Animation Loop using performance.now()
+    const startTime = performance.now();
 
     const animate = () => {
-      const elapsedTime = clock.getElapsedTime();
+      if (!isVisible.current) return;
 
-      // Smooth mouse interpolation (lerp)
-      mouse.x += (mouse.targetX - mouse.x) * 0.08;
-      mouse.y += (mouse.targetY - mouse.y) * 0.08;
+      const elapsedTime = (performance.now() - startTime) * 0.001;
 
-      // Subtle scene tilt parallax
-      pointsMesh.rotation.y = elapsedTime * 0.05 + mouse.x * 0.4;
-      pointsMesh.rotation.x = mouse.y * 0.3;
-      innerMesh.rotation.y = -elapsedTime * 0.08 - mouse.x * 0.2;
-      innerMesh.rotation.x = -mouse.y * 0.15;
+      // Mouse interpolation (lerp)
+      mouse.x += (mouse.targetX - mouse.x) * 0.06;
+      mouse.y += (mouse.targetY - mouse.y) * 0.06;
 
-      // Update particle positions based on distance to mouse and procedural noise
+      // Scene rotation
+      pointsMesh.rotation.y = elapsedTime * 0.05 + mouse.x * 0.35;
+      pointsMesh.rotation.x = mouse.y * 0.25;
+      innerMesh.rotation.y = -elapsedTime * 0.08 - mouse.x * 0.18;
+      innerMesh.rotation.x = -mouse.y * 0.12;
+
       const positionsAttr = geometry.attributes.position as THREE.BufferAttribute;
       const posArray = positionsAttr.array as Float32Array;
 
-      // Unproject mouse coordinates to world coords at orb depth
+      // Compute mouse world coords and mesh transform once per frame
       mouseWorld.set(mouse.x * 3.5, mouse.y * 3.5, 0);
+      rotationMatrix.makeRotationFromEuler(pointsMesh.rotation);
+      invRotation.copy(rotationMatrix).invert();
+
+      const forceLimit = 3.0;
 
       for (let i = 0; i < particleCount; i++) {
         const i3 = i * 3;
@@ -169,7 +189,7 @@ export function ThreeInteractiveOrb() {
         const oY = originalPositions[i3 + 1];
         const oZ = originalPositions[i3 + 2];
 
-        // 1. Procedural morphing (waving noise)
+        // Procedural morphing
         const wave = Math.sin(elapsedTime * 1.2 + oX * 2.0 + oY * 1.5) * 0.15;
         const cosWave = Math.cos(elapsedTime * 1.0 + oZ * 2.0) * 0.12;
 
@@ -177,28 +197,19 @@ export function ThreeInteractiveOrb() {
         let currentY = oY * (1 + wave);
         let currentZ = oZ * (1 + cosWave);
 
-        // 2. Mouse interactive dispersion
-        // Distance in world coordinates from particle to mouse position
-        const pVec = new THREE.Vector3(currentX, currentY, currentZ);
-        // Apply mesh rotations to correctly calculate world position of particles
-        pVec.applyEuler(pointsMesh.rotation);
+        if (!isCoarsePointer) {
+          scratchVec.set(currentX, currentY, currentZ).applyEuler(pointsMesh.rotation);
+          const dist = scratchVec.distanceTo(mouseWorld);
 
-        const dist = pVec.distanceTo(mouseWorld);
-        const forceLimit = 3.0;
+          if (dist < forceLimit) {
+            scratchDir.copy(scratchVec).sub(mouseWorld).normalize();
+            const force = (forceLimit - dist) * 0.16;
+            scratchDir.applyMatrix4(invRotation);
 
-        if (dist < forceLimit) {
-          // Repulsion force vector
-          const dir = pVec.clone().sub(mouseWorld).normalize();
-          const force = (forceLimit - dist) * 0.18;
-          
-          // Un-apply the mesh rotation to apply relative updates to positionsAttr
-          const rotationMatrix = new THREE.Matrix4().makeRotationFromEuler(pointsMesh.rotation);
-          const invRotation = rotationMatrix.invert();
-          dir.applyMatrix4(invRotation);
-
-          currentX += dir.x * force;
-          currentY += dir.y * force;
-          currentZ += dir.z * force;
+            currentX += scratchDir.x * force;
+            currentY += scratchDir.y * force;
+            currentZ += scratchDir.z * force;
+          }
         }
 
         posArray[i3] = currentX;
@@ -207,19 +218,30 @@ export function ThreeInteractiveOrb() {
       }
 
       positionsAttr.needsUpdate = true;
-
-      // Render
       renderer.render(scene, camera);
 
       animationFrameId.current = requestAnimationFrame(animate);
     };
 
-    animate();
+    // IntersectionObserver to pause rendering when scrolled offscreen
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const wasVisible = isVisible.current;
+        isVisible.current = entry.isIntersecting;
+        if (!wasVisible && entry.isIntersecting) {
+          animationFrameId.current = requestAnimationFrame(animate);
+        }
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(container);
 
-    // Clean up
+    animationFrameId.current = requestAnimationFrame(animate);
+
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("resize", handleResize);
+      observer.disconnect();
       if (animationFrameId.current) {
         cancelAnimationFrame(animationFrameId.current);
       }
@@ -233,12 +255,12 @@ export function ThreeInteractiveOrb() {
   }, []);
 
   return (
-    <div 
-      ref={containerRef} 
+    <div
+      ref={containerRef}
       className="absolute inset-0 md:inset-auto md:top-0 md:right-0 w-full md:w-[50%] h-[100vh] pointer-events-none select-none z-0 md:z-10 flex items-center justify-center overflow-hidden opacity-30 md:opacity-100"
     >
-      <canvas 
-        ref={canvasRef} 
+      <canvas
+        ref={canvasRef}
         className="w-[90%] h-[90%] md:w-[500px] md:h-[500px] opacity-75 lg:opacity-90 max-w-[800px] aspect-square"
       />
     </div>
