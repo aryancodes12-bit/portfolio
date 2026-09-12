@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { Marquee } from "@/components/magicui/marquee";
 
@@ -71,7 +69,6 @@ const skillCategories: SkillCategory[] = [
   },
 ];
 
-// Flatten all skills with category metadata for the marquee rows
 const row1 = skillCategories.flatMap((cat) =>
   cat.skills.slice(0, Math.ceil(cat.skills.length / 2)).map((skill) => ({
     skill,
@@ -120,46 +117,50 @@ export function Skills() {
               <p className={`text-xs font-mono font-bold uppercase tracking-widest ${cat.color}`}>
                 {cat.title}
               </p>
+              <p className="text-[10px] font-mono text-zinc-500 mt-0.5">
+                {cat.skills.length} competencies
+              </p>
             </div>
           ))}
         </div>
 
-        {/* Marquee rows */}
-        <div className="relative flex flex-col gap-4 w-full py-6 overflow-hidden rounded-3xl border border-zinc-900 bg-zinc-950/40 backdrop-blur-sm">
-          <Marquee className="[--duration:30s]" pauseOnHover>
+        {/* Infinite Marquee Rows */}
+        <div className="relative flex flex-col gap-4 overflow-hidden rounded-2xl border border-zinc-900 bg-zinc-950/40 py-6 backdrop-blur-sm">
+          <Marquee pauseOnHover className="[--duration:35s]">
             {row1.map((item, i) => (
-              <button
-                key={`${item.skill}-${i}`}
-                onClick={() => {
-                  navigator.clipboard.writeText(item.skill);
-                }}
-                title={`Click to copy "${item.skill}"`}
-                className={`flex items-center gap-2 rounded-2xl border ${item.borderColor} bg-zinc-950 px-5 py-3 text-sm font-mono text-zinc-300 hover:text-white hover:border-primary/50 hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer group`}
+              <div
+                key={i}
+                className={`flex items-center gap-2 rounded-xl border ${item.borderColor} bg-zinc-900/60 px-4 py-2 backdrop-blur-sm transition-colors hover:bg-zinc-800/80`}
               >
-                <span className={`text-xs ${item.color} font-bold uppercase group-hover:scale-110 transition-transform`}>{item.category[0]}</span>
-                <span className="font-bold">{item.skill}</span>
-              </button>
+                <span className={`text-xs font-mono font-bold ${item.color}`}>
+                  {item.skill}
+                </span>
+                <span className="text-[9px] font-mono text-zinc-600 uppercase">
+                  {item.category}
+                </span>
+              </div>
             ))}
           </Marquee>
 
-          <Marquee className="[--duration:30s]" reverse pauseOnHover>
+          <Marquee reverse pauseOnHover className="[--duration:35s]">
             {row2.map((item, i) => (
-              <button
-                key={`${item.skill}-${i}`}
-                onClick={() => {
-                  navigator.clipboard.writeText(item.skill);
-                }}
-                title={`Click to copy "${item.skill}"`}
-                className={`flex items-center gap-2 rounded-2xl border ${item.borderColor} bg-zinc-950 px-5 py-3 text-sm font-mono text-zinc-300 hover:text-white hover:border-primary/50 hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer group`}
+              <div
+                key={i}
+                className={`flex items-center gap-2 rounded-xl border ${item.borderColor} bg-zinc-900/60 px-4 py-2 backdrop-blur-sm transition-colors hover:bg-zinc-800/80`}
               >
-                <span className={`text-xs ${item.color} font-bold uppercase group-hover:scale-110 transition-transform`}>{item.category[0]}</span>
-                <span className="font-bold">{item.skill}</span>
-              </button>
+                <span className={`text-xs font-mono font-bold ${item.color}`}>
+                  {item.skill}
+                </span>
+                <span className="text-[9px] font-mono text-zinc-600 uppercase">
+                  {item.category}
+                </span>
+              </div>
             ))}
           </Marquee>
 
-          <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-background to-transparent z-10" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-background to-transparent z-10" />
+          {/* Left/Right Edge Gradient Fades */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-background to-transparent" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-background to-transparent" />
         </div>
       </div>
     </section>
