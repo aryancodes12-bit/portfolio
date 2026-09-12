@@ -6,7 +6,12 @@ import { RetroGrid } from "@/components/magicui/retro-grid";
 import { Particles } from "@/components/magicui/particles";
 import { BorderBeam } from "@/components/magicui/border-beam";
 import { FileText, Github, Code2, Award, ChevronDown } from "lucide-react";
-import { ThreeInteractiveOrb } from "@/components/ui/ThreeInteractiveOrb";
+import dynamic from "next/dynamic";
+
+const ThreeInteractiveOrb = dynamic(
+  () => import("@/components/ui/ThreeInteractiveOrb").then((mod) => mod.ThreeInteractiveOrb),
+  { ssr: false }
+);
 import { ShinyText } from "@/components/ui/ShinyText";
 import { Magnetic } from "@/components/ui/Magnetic";
 import { LiveActivityTicker } from "@/components/ui/LiveActivityTicker";
