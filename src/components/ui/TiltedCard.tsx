@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState, useMemo } from "react";
+import React, { useRef, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 
 interface TiltedCardProps {
@@ -19,6 +19,7 @@ export function TiltedCard({
   perspective = 1000,
 }: TiltedCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const rectRef = useRef<{ left: number; top: number; width: number; height: number } | null>(null);
   const [hovered, setHovered] = useState(false);
 
   // Motion values for rotation
@@ -31,47 +32,51 @@ export function TiltedCard({
   const glareOpacityVal = useMotionValue(0);
 
   // Springs for smooth movement
-  const springConfig = { stiffness: 180, damping: 20, mass: 0.6 };
+  const springConfig = { stiffness: 220, damping: 22, mass: 0.5 };
   const rotateX = useSpring(rotateXVal, springConfig);
   const rotateY = useSpring(rotateYVal, springConfig);
   const glareX = useSpring(glareXVal, springConfig);
   const glareY = useSpring(glareYVal, springConfig);
   const glareOpacity = useSpring(glareOpacityVal, springConfig);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const card = cardRef.current;
-    if (!card) return;
-
-    const rect = card.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-
-    // Calculate coordinates relative to card center (-0.5 to 0.5)
-    const relativeX = (e.clientX - rect.left) / width - 0.5;
-    const relativeY = (e.clientY - rect.top) / height - 0.5;
-
-    // Map relative coordinates to degrees
-    rotateXVal.set(-relativeY * maxTilt);
-    rotateYVal.set(relativeX * maxTilt);
-
-    // Glare position in percentage (0 to 100)
-    glareXVal.set(((e.clientX - rect.left) / width) * 100);
-    glareYVal.set(((e.clientY - rect.top) / height) * 100);
-    glareOpacityVal.set(0.2); // Show glare on hover
-  };
-
   const handleMouseEnter = () => {
+    if (cardRef.current) {
+      rectRef.current = cardRef.current.getBoundingClientRect();
+    }
     setHovered(true);
   };
 
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    let rect = rectRef.current;
+    if (!rect && cardRef.current) {
+      rect = cardRef.current.getBoundingClientRect();
+      rectRef.current = rect;
+    }
+    if (!rect) return;
+
+    const width = rect.width || 1;
+    const height = rect.height || 1;
+
+    // Relative coordinates (-0.5 to 0.5)
+    const relativeX = (e.clientX - rect.left) / width - 0.5;
+    const relativeY = (e.clientY - rect.top) / height - 0.5;
+
+    rotateXVal.set(-relativeY * maxTilt);
+    rotateYVal.set(relativeX * maxTilt);
+
+    glareXVal.set(((e.clientX - rect.left) / width) * 100);
+    glareYVal.set(((e.clientY - rect.top) / height) * 100);
+    glareOpacityVal.set(0.18);
+  };
+
   const handleMouseLeave = () => {
+    rectRef.current = null;
     setHovered(false);
     rotateXVal.set(0);
     rotateYVal.set(0);
     glareOpacityVal.set(0);
   };
 
-  // Radial gradient style for glare reflection
   const glareStyle = useTransform(
     [glareX, glareY, glareOpacity],
     ([x, y, opacity]) => {
@@ -82,8 +87,8 @@ export function TiltedCard({
   return (
     <motion.div
       ref={cardRef}
-      onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
+      onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{
         transformStyle: "preserve-3d",
@@ -94,20 +99,20 @@ export function TiltedCard({
       animate={{
         scale: hovered ? scale : 1,
       }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      className={`relative overflow-hidden rounded-2xl ${className}`}
+      transition={{ type: "spring", stiffness: 320, damping: 22 }}
+      className={`relative overflow-hidden rounded-2xl will-change-transform ${className}`}
     >
       {/* Glare overlay */}
       <motion.div
+        className="pointer-events-none absolute inset-0 z-20 transition-opacity duration-300"
         style={{
           background: glareStyle,
-          mixBlendMode: "overlay",
+          opacity: hovered ? 1 : 0,
         }}
-        className="absolute inset-0 z-30 pointer-events-none"
       />
-      <div style={{ transform: "translateZ(10px)", transformStyle: "preserve-3d" }} className="w-full h-full">
-        {children}
-      </div>
+      {children}
     </motion.div>
   );
 }
+
+export default TiltedCard;
