@@ -284,3 +284,23 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 4px;
 }
 
+/* Accessibility: Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Mobile & Touch Device Optimization */
+@media (hover: none) and (pointer: coarse) {
+  .interactive-hover-lift:hover {
+    transform: none !important;
+  }
+}
+
+

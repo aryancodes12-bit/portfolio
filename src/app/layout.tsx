@@ -11,14 +11,12 @@ const spaceGrotesk = Space_Grotesk({
   variable: "--font-space",
   weight: ["500", "700"],
   display: "swap",
-  preload: false,
 });
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
   display: "swap",
-  preload: false,
 });
 
 const jetbrains = JetBrains_Mono({
@@ -26,10 +24,10 @@ const jetbrains = JetBrains_Mono({
   variable: "--font-jetbrains",
   weight: "400",
   display: "swap",
-  preload: false,
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://ajportfolio.com"),
   title: "AJ's Portfolio",
   description: "Showcasing high‑impact engineering work",
   openGraph: {
