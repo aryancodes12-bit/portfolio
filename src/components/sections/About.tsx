@@ -111,9 +111,21 @@ export function About() {
             title="Triple-click for a surprise..."
           >
             <BorderBeam size={140} duration={8} colorFrom="#00f0ff" colorTo="#bc13fe" delay={0} />
-            <p className="font-mono text-[10px] tracking-widest text-secondary uppercase mb-4">
-              Passionate about building innovative solutions
-            </p>
+            <div className="flex items-center gap-6 mb-6">
+              <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-primary/50 shadow-[0_0_15px_rgba(0,240,255,0.3)]">
+                <img
+                  src="/profile.jpeg"
+                  alt="Aryan Jaiswal"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-zinc-100 font-display">Aryan Jaiswal</h3>
+                <p className="font-mono text-[10px] tracking-widest text-secondary uppercase mt-1">
+                  Passionate about building innovative solutions
+                </p>
+              </div>
+            </div>
             {bioParas.map((para, i) => (
               <p key={i} className="text-zinc-400 text-sm leading-relaxed mb-4 last:mb-0">
                 {para}
