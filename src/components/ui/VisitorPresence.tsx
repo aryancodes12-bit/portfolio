@@ -12,8 +12,13 @@ export function VisitorPresence() {
   const idRef = useRef<string>("");
 
   const heartbeat = useCallback(async () => {
+    // Skip heartbeat if user has tab in background
+    if (typeof document !== "undefined" && document.visibilityState === "hidden") {
+      return;
+    }
+
     try {
-      if (!idRef.current) {
+      if (!idRef.current && typeof window !== "undefined") {
         idRef.current = sessionStorage.getItem("_vp_id") || generateId();
         sessionStorage.setItem("_vp_id", idRef.current);
       }
@@ -22,8 +27,11 @@ export function VisitorPresence() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ visitorId: idRef.current }),
       });
-      const data = await res.json();
-      setCount(data.count || 0);
+      if (res.ok) {
+        const data = await res.json();
+        const nextCount = data.count || 0;
+        setCount((prev) => (prev !== nextCount ? nextCount : prev));
+      }
     } catch {
       /* silent */
     }
@@ -31,17 +39,28 @@ export function VisitorPresence() {
 
   useEffect(() => {
     heartbeat();
-    const interval = setInterval(heartbeat, 30_000);
-    return () => clearInterval(interval);
+    const interval = setInterval(heartbeat, 45_000); // 45s interval
+    
+    const onVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        heartbeat();
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+    };
   }, [heartbeat]);
 
   return (
     <AnimatePresence>
       {count > 0 && (
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
+          initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
+          exit={{ opacity: 0, scale: 0.9 }}
           className="inline-flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-950/80 backdrop-blur-md px-3 py-1.5 text-xs font-mono text-zinc-400"
         >
           <span className="relative flex h-2 w-2">
@@ -57,3 +76,5 @@ export function VisitorPresence() {
     </AnimatePresence>
   );
 }
+
+export default VisitorPresence;
