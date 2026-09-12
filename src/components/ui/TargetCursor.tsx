@@ -1,28 +1,38 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 export function TargetCursor() {
   const [hovered, setHovered] = useState(false);
   const [clicked, setClicked] = useState(false);
   const [visible, setVisible] = useState(false);
+  const isEnabled = useRef(false);
 
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
+  const mouseX = useMotionValue(-100);
+  const mouseY = useMotionValue(-100);
 
-  // Smooth springs for the outer ring
-  const springConfig = { stiffness: 220, damping: 24, mass: 0.8 };
+  // Springs for smooth movement
+  const springConfig = { stiffness: 260, damping: 26, mass: 0.6 };
   const ringX = useSpring(mouseX, springConfig);
   const ringY = useSpring(mouseY, springConfig);
 
-  // Fast springs for the inner dot
-  const dotConfig = { stiffness: 800, damping: 35 };
+  const dotConfig = { stiffness: 900, damping: 35 };
   const dotX = useSpring(mouseX, dotConfig);
   const dotY = useSpring(mouseY, dotConfig);
 
   useEffect(() => {
-    // Hide default cursor
+    // Only enable on desktop pointer devices
+    const isTouchDevice =
+      typeof window !== "undefined" &&
+      (window.matchMedia("(pointer: coarse)").matches ||
+        window.matchMedia("(hover: none)").matches);
+
+    if (isTouchDevice) {
+      return;
+    }
+
+    isEnabled.current = true;
     document.body.style.cursor = "none";
 
     const moveMouse = (e: MouseEvent) => {
@@ -34,49 +44,50 @@ export function TargetCursor() {
     const handleMouseDown = () => setClicked(true);
     const handleMouseUp = () => setClicked(false);
 
-    const handleMouseEnterInteractive = () => setHovered(true);
-    const handleMouseLeaveInteractive = () => setHovered(false);
-
-    window.addEventListener("mousemove", moveMouse);
-    window.addEventListener("mousedown", handleMouseDown);
-    window.addEventListener("mouseup", handleMouseUp);
-
-    // Add hover listeners to interactive elements
-    const addHoverListeners = () => {
-      const targets = document.querySelectorAll(
-        "a, button, [role='button'], input, select, textarea, .interactive-target"
-      );
-      targets.forEach((target) => {
-        target.removeEventListener("mouseenter", handleMouseEnterInteractive);
-        target.removeEventListener("mouseleave", handleMouseLeaveInteractive);
-        target.addEventListener("mouseenter", handleMouseEnterInteractive);
-        target.addEventListener("mouseleave", handleMouseLeaveInteractive);
-      });
+    // Efficient event delegation instead of scanning DOM tree with MutationObserver
+    const handleMouseOver = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (
+        target?.closest(
+          "a, button, [role='button'], input, select, textarea, .interactive-target"
+        )
+      ) {
+        setHovered(true);
+      }
     };
 
-    addHoverListeners();
+    const handleMouseOut = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (
+        target?.closest(
+          "a, button, [role='button'], input, select, textarea, .interactive-target"
+        )
+      ) {
+        setHovered(false);
+      }
+    };
 
-    // Observe changes to the DOM to attach hover listeners to dynamically added elements
-    const observer = new MutationObserver(() => {
-      addHoverListeners();
-    });
-
-    observer.observe(document.body, { childList: true, subtree: true });
+    window.addEventListener("mousemove", moveMouse, { passive: true });
+    window.addEventListener("mousedown", handleMouseDown, { passive: true });
+    window.addEventListener("mouseup", handleMouseUp, { passive: true });
+    document.addEventListener("mouseover", handleMouseOver, { passive: true });
+    document.addEventListener("mouseout", handleMouseOut, { passive: true });
 
     return () => {
       document.body.style.cursor = "auto";
       window.removeEventListener("mousemove", moveMouse);
       window.removeEventListener("mousedown", handleMouseDown);
       window.removeEventListener("mouseup", handleMouseUp);
-      observer.disconnect();
+      document.removeEventListener("mouseover", handleMouseOver);
+      document.removeEventListener("mouseout", handleMouseOut);
     };
   }, [mouseX, mouseY, visible]);
 
   if (!visible) return null;
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-[9999] hidden md:block">
-      {/* Outer Ring with Crosshair Target look */}
+    <div className="pointer-events-none fixed inset-0 z-[9999] hidden md:block select-none" aria-hidden="true">
+      {/* Outer Ring — uses GPU scale transform instead of width/height layout reflow */}
       <motion.div
         style={{
           x: ringX,
@@ -85,13 +96,11 @@ export function TargetCursor() {
           translateY: "-50%",
         }}
         animate={{
-          width: hovered ? 56 : clicked ? 32 : 42,
-          height: hovered ? 56 : clicked ? 32 : 42,
-          borderColor: hovered ? "var(--color-primary)" : "#ffffff",
-          scale: clicked ? 0.9 : 1,
+          scale: hovered ? 1.35 : clicked ? 0.75 : 1,
+          borderColor: hovered ? "var(--color-primary)" : "rgba(255, 255, 255, 0.7)",
         }}
-        transition={{ type: "spring", stiffness: 350, damping: 22 }}
-        className="absolute rounded-full border border-white/60 flex items-center justify-center mix-blend-difference"
+        transition={{ type: "spring", stiffness: 400, damping: 25 }}
+        className="absolute w-11 h-11 rounded-full border flex items-center justify-center mix-blend-difference will-change-transform"
       >
         {/* Crosshair ticks */}
         <span className="absolute w-[1.5px] h-[5px] bg-white top-0" />
@@ -109,12 +118,14 @@ export function TargetCursor() {
           translateY: "-50%",
         }}
         animate={{
-          scale: hovered ? 1.5 : clicked ? 0.6 : 1,
-          backgroundColor: hovered ? "#00f0ff" : "#ff007f",
+          scale: clicked ? 1.8 : hovered ? 0.6 : 1,
+          backgroundColor: hovered ? "var(--color-primary)" : "#ffffff",
         }}
-        transition={{ type: "spring", stiffness: 500, damping: 28 }}
-        className="absolute w-2 h-2 rounded-full mix-blend-difference"
+        transition={{ type: "spring", stiffness: 600, damping: 30 }}
+        className="absolute w-1.5 h-1.5 rounded-full shadow-[0_0_8px_rgba(0,240,255,0.8)] will-change-transform"
       />
     </div>
   );
 }
+
+export default TargetCursor;
