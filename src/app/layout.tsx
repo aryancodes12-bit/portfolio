@@ -4,22 +4,29 @@ import "./globals.css";
 import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
 import TopNav from "@/components/ui/TopNav";
 import NavigationDock from "@/components/sections/NavigationDock";
+import { AIChatbot } from "@/components/chatbot/AIChatbot";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-space",
   weight: ["500", "700"],
+  display: "swap",
+  preload: false,
 });
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
+  preload: false,
 });
 
 const jetbrains = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-jetbrains",
   weight: "400",
+  display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -55,6 +62,8 @@ export default function RootLayout({
         <TopNav />
         {/* Navigation Dock */}
         <NavigationDock />
+        {/* AI Chatbot — floats over all pages */}
+        <AIChatbot />
         {/* Main app root for scroll targets */}
         <div id="app-root" className="relative">
           <main id="main-content" className="relative">

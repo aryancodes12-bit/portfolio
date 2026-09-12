@@ -91,8 +91,8 @@ function CodeStreamBg() {
       chars: Array.from({ length: 6 }, (_, j) => ({
         id: j,
         text: CODE_CHARS[(i * 3 + j) % CODE_CHARS.length],
-        duration: 2.5 + Math.random() * 3,
-        delay: Math.random() * 4,
+        duration: 2.5 + (((i * 7 + j * 13) % 100) / 100) * 3,
+        delay: (((i * 11 + j * 17) % 100) / 100) * 4,
         left: `${5 + i * 8}%`,
         top: `${10 + j * 14}%`,
       })),
