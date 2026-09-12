@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { BorderBeam } from "@/components/magicui/border-beam";
 import { Briefcase, GraduationCap, MapPin, Calendar } from "lucide-react";
@@ -113,9 +114,11 @@ export function About() {
             <BorderBeam size={140} duration={8} colorFrom="#00f0ff" colorTo="#bc13fe" delay={0} />
             <div className="flex items-center gap-6 mb-6">
               <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-primary/50 shadow-[0_0_15px_rgba(0,240,255,0.3)]">
-                <img
+                <Image
                   src="/profile.jpeg"
                   alt="Aryan Jaiswal"
+                  width={80}
+                  height={80}
                   className="w-full h-full object-cover"
                 />
               </div>
