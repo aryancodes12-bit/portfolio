@@ -4,21 +4,23 @@
  * AIChatbot.tsx
  * ---------------------------------------------------------------------------
  * Root orchestrator for the AI chatbot feature.
- * Manages: open/close state, message history, API calls, loading state.
- *
- * Rendered in layout.tsx so it's available on ALL pages without modifying
- * any existing section components.
+ * Optimized with Next.js dynamic import: ChatWindow is only loaded on first interaction.
  * ---------------------------------------------------------------------------
  */
 
 import React, { useState, useCallback, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { ChatButton } from "./ChatButton";
-import { ChatWindow } from "./ChatWindow";
 import { type Message } from "./ChatMessage";
 import { sendChatMessage } from "@/services/chatbotService";
 import { openingMessage } from "@/data/chatbotKnowledge";
 
-// Re-export Message type for other components
+// Dynamically import the heavy ChatWindow (includes markdown, icons, animations)
+const ChatWindow = dynamic(
+  () => import("./ChatWindow").then((mod) => mod.ChatWindow),
+  { ssr: false }
+);
+
 export type { Message };
 
 let messageIdCounter = 0;
@@ -45,7 +47,6 @@ export function AIChatbot() {
   const [inputValue, setInputValue] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(true);
 
-  // Show notification dot until first open
   const showUnread = !hasBeenOpened;
 
   const handleOpen = useCallback(() => {
@@ -65,7 +66,6 @@ export function AIChatbot() {
     }
   }, [isOpen, handleOpen, handleClose]);
 
-  // Handle Escape key to close
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isOpen) {
@@ -81,18 +81,14 @@ export function AIChatbot() {
       const trimmed = text.trim();
       if (!trimmed || isTyping) return;
 
-      // Hide suggestions once user sends a message
       setShowSuggestions(false);
 
-      // Add user message immediately
       const userMsg = createMessage("user", trimmed);
       setMessages((prev) => [...prev, userMsg]);
       setInputValue("");
       setIsTyping(true);
 
       try {
-        // Build history (exclude typing indicator, exclude the opening message
-        // from history context for cleanliness — it's embedded in system prompt)
         const historyForAPI = messages
           .filter((m) => m.id !== "typing-indicator")
           .map((m) => ({ role: m.role, content: m.content }));
@@ -132,17 +128,19 @@ export function AIChatbot() {
 
   return (
     <>
-      <ChatWindow
-        isOpen={isOpen}
-        onClose={handleClose}
-        messages={messages}
-        isTyping={isTyping}
-        inputValue={inputValue}
-        onInputChange={setInputValue}
-        onSend={handleSend}
-        onSuggestion={handleSuggestion}
-        showSuggestions={showSuggestions}
-      />
+      {(isOpen || hasBeenOpened) && (
+        <ChatWindow
+          isOpen={isOpen}
+          onClose={handleClose}
+          messages={messages}
+          isTyping={isTyping}
+          inputValue={inputValue}
+          onInputChange={setInputValue}
+          onSend={handleSend}
+          onSuggestion={handleSuggestion}
+          showSuggestions={showSuggestions}
+        />
+      )}
       <ChatButton
         isOpen={isOpen}
         onClick={handleToggle}
@@ -151,3 +149,5 @@ export function AIChatbot() {
     </>
   );
 }
+
+export default AIChatbot;
