@@ -3,6 +3,8 @@ import { About } from "@/components/sections/About";
 import { Skills } from "@/components/sections/Skills";
 import { Projects } from "@/components/sections/Projects";
 import { Experience } from "@/components/sections/Experience";
+import { GitHubHeatmap } from "@/components/sections/GitHubHeatmap";
+import { Testimonials } from "@/components/sections/Testimonials";
 import { Contact } from "@/components/sections/Contact";
 import { TargetCursor } from "@/components/ui/TargetCursor";
 import { AuroraBackground } from "@/components/ui/AuroraBackground";
@@ -29,6 +31,12 @@ export default function Home() {
         </ScrollReveal>
         <ScrollReveal direction="up" delay={0.2}>
           <Experience />
+        </ScrollReveal>
+        <ScrollReveal direction="up" delay={0.2}>
+          <GitHubHeatmap />
+        </ScrollReveal>
+        <ScrollReveal direction="up" delay={0.2}>
+          <Testimonials />
         </ScrollReveal>
         <ScrollReveal direction="up" delay={0.2}>
           <Contact />

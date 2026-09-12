@@ -13,6 +13,7 @@ import {
   Mail,
   FlaskConical,
   BarChart3,
+  PenLine,
 } from "lucide-react";
 import { Magnetic } from "@/components/ui/Magnetic";
 import { motion } from "framer-motion";
@@ -31,6 +32,7 @@ const navItems: NavItem[] = [
   { label: "Projects",   icon: FolderGit2,  href: ()  => "/projects",                          isPage: true  },
   { label: "Experience", icon: Briefcase,   href: (h) => (h ? "#experience" : "/#experience"), isPage: false },
   { label: "Lab",        icon: FlaskConical, href: ()  => "/lab",                              isPage: true  },
+  { label: "Blog",       icon: PenLine,     href: ()  => "/blog",                              isPage: true  },
   { label: "Analytics",  icon: BarChart3,   href: ()  => "/analytics",                         isPage: true  },
   { label: "Contact",    icon: Mail,        href: (h) => (h ? "#contact"    : "/#contact"),    isPage: false },
 ];
@@ -60,6 +62,7 @@ export function NavigationDock() {
             item.isPage &&
             ((pathname.startsWith("/projects") && item.label === "Projects") ||
               (pathname === "/lab" && item.label === "Lab") ||
+              (pathname.startsWith("/blog") && item.label === "Blog") ||
               (pathname === "/analytics" && item.label === "Analytics"));
 
           return (

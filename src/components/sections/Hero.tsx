@@ -10,6 +10,8 @@ import { ThreeInteractiveOrb } from "@/components/ui/ThreeInteractiveOrb";
 import { ShinyText } from "@/components/ui/ShinyText";
 import { Magnetic } from "@/components/ui/Magnetic";
 import { LiveActivityTicker } from "@/components/ui/LiveActivityTicker";
+import { VisitorPresence } from "@/components/ui/VisitorPresence";
+import { NowPlaying } from "@/components/ui/NowPlaying";
 
 const titles = ["Full Stack Developer", "Designer", "Problem Solver", "Innovator"];
 
@@ -187,6 +189,17 @@ export function Hero() {
           className="mb-8 self-center lg:self-start"
         >
           <LiveActivityTicker />
+        </motion.div>
+
+        {/* Visitor Presence + Now Playing */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.2 }}
+          className="flex flex-wrap items-center gap-3 mb-4 self-center lg:self-start"
+        >
+          <VisitorPresence />
+          <NowPlaying />
         </motion.div>
 
         <motion.p

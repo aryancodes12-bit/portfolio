@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { Send, CheckCircle2, ShieldAlert, Mail, MapPin, Github, Linkedin, Twitter, ArrowUpRight } from "lucide-react";
+import { PerformanceDashboard } from "@/components/ui/PerformanceDashboard";
 
 const contactInfo = [
   {
@@ -214,16 +215,8 @@ export function Contact() {
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="mt-20 text-center border-t border-zinc-900 pt-8">
-          <p className="text-zinc-500 text-sm">
-            Designed &amp; Built by{" "}
-            <span className="text-primary font-medium font-mono">Aryan Jaiswal</span>
-          </p>
-          <p className="text-zinc-700 text-xs mt-2 font-mono">
-            Built with Next.js, TypeScript &amp; Tailwind CSS
-          </p>
-        </div>
+        {/* Performance Dashboard Footer */}
+        <PerformanceDashboard />
       </div>
     </section>
   );
